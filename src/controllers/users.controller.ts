@@ -17,20 +17,20 @@ import {
   del,
   requestBody,
 } from '@loopback/rest';
-import {User} from '../models';
-import {UserRepository} from '../repositories';
+import { User } from '../models';
+import { UserRepository } from '../repositories';
 
 export class UsersController {
   constructor(
     @repository(UserRepository)
-    public userRepository : UserRepository,
-  ) {}
+    public userRepository: UserRepository,
+  ) { }
 
   @post('/users', {
     responses: {
       '200': {
         description: 'User model instance',
-        content: {'application/json': {schema: getModelSchemaRef(User)}},
+        content: { 'application/json': { schema: getModelSchemaRef(User) } },
       },
     },
   })
@@ -50,11 +50,25 @@ export class UsersController {
     return this.userRepository.create(user);
   }
 
+  @get('/users/cpf/{cpf}', {
+    responses: {
+      '200': {
+        description: 'Get User for CPF',
+        content: { 'application/json': { schema: getModelSchemaRef(User) } },
+      },
+    },
+  })
+  async searchCpf(
+    @param.path.number('cpf') cpf: string,
+  ): Promise<User> {
+    return this.userRepository.findByCpf(cpf);
+  }
+
   @get('/users/count', {
     responses: {
       '200': {
         description: 'User model count',
-        content: {'application/json': {schema: CountSchema}},
+        content: { 'application/json': { schema: CountSchema } },
       },
     },
   })
@@ -72,7 +86,7 @@ export class UsersController {
           'application/json': {
             schema: {
               type: 'array',
-              items: getModelSchemaRef(User, {includeRelations: true}),
+              items: getModelSchemaRef(User, { includeRelations: true }),
             },
           },
         },
@@ -89,7 +103,7 @@ export class UsersController {
     responses: {
       '200': {
         description: 'User PATCH success count',
-        content: {'application/json': {schema: CountSchema}},
+        content: { 'application/json': { schema: CountSchema } },
       },
     },
   })
@@ -97,7 +111,7 @@ export class UsersController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(User, {partial: true}),
+          schema: getModelSchemaRef(User, { partial: true }),
         },
       },
     })
@@ -113,7 +127,7 @@ export class UsersController {
         description: 'User model instance',
         content: {
           'application/json': {
-            schema: getModelSchemaRef(User, {includeRelations: true}),
+            schema: getModelSchemaRef(User, { includeRelations: true }),
           },
         },
       },
@@ -138,7 +152,7 @@ export class UsersController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(User, {partial: true}),
+          schema: getModelSchemaRef(User, { partial: true }),
         },
       },
     })
